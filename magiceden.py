@@ -101,11 +101,10 @@ def mint(values, isWindows):
     def initWallet():
         print("Status - Initializing wallet")
         # add wallet to chrome
-        # if isWindows:
-        #     driver.switch_to.window(driver.window_handles[1])
-        # else:
-        #     driver.switch_to.window(driver.window_handles[0])
-        driver.switch_to.window(driver.window_handles[0])
+        if isWindows:
+            driver.switch_to.window(driver.window_handles[0])
+        else:
+            driver.switch_to.window(driver.window_handles[1])
         print("Event - switch window")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
             (By.XPATH, "//button[contains(text(),'Use Secret Recovery Phrase')]")))
