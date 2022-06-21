@@ -97,6 +97,7 @@ def mint(values, isWindows):
         approve = driver.find_element(
             By.XPATH, "//button[contains(text(), 'Approve')]")
         approve.click()
+        time.sleep(10)
 
     def initWallet():
         print("Status - Initializing wallet")
