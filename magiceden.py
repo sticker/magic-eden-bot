@@ -18,16 +18,20 @@ from webdriver_manager.chrome import ChromeDriverManager
 def mint(values, isWindows):
     def selectWallet():
         print("Status - Selecting wallet on ME")
+        time.sleep(1)
+        driver.execute_script("window.scrollBy(0, 600);")
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
-            (By.XPATH, "//button[contains(text(), 'Select Wallet')]")))
+            (By.XPATH, "//button[contains(text(), 'Wallet not connected')]")))
         select_wallet = driver.find_element(
-            By.XPATH, "//button[contains(text(), 'Select Wallet')]")
+            By.XPATH, "//button[contains(text(), 'Wallet not connected')]")
+        time.sleep(1)
         select_wallet.click()
 
         WebDriverWait(driver, 60).until(EC.presence_of_element_located(
-            (By.XPATH, "//button[contains(text(),'Phantom')]")))
+            (By.XPATH, "//div[contains(text(),'Detected')]")))
         phantom = driver.find_element(
-            By.XPATH, "//button[contains(text(),'Phantom')]")
+            By.XPATH, "//div[contains(text(),'Detected')]")
+        time.sleep(1)
         phantom.click()
 
         original_window = driver.current_window_handle
@@ -102,7 +106,10 @@ def mint(values, isWindows):
     def initWallet():
         print("Status - Initializing wallet")
         # add wallet to chrome
+        time.sleep(1)
         if isWindows:
+            driver.switch_to.window(driver.window_handles[1])
+            time.sleep(2)
             driver.switch_to.window(driver.window_handles[0])
         else:
             driver.switch_to.window(driver.window_handles[1])
@@ -162,12 +169,13 @@ def mint(values, isWindows):
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
     print("Assertion - successfully found chrome driver")
 
-    # opens the launchpad page
-    driver.get(values[0])
     driver.maximize_window()
 
     # Actions - Initialize wallet
     main_window = initWallet()
+
+    # opens the launchpad page
+    driver.get(values[0])
 
     # Actions - select wallet on magic eden
     selectWallet()
